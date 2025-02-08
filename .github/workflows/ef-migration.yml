@@ -1,0 +1,68 @@
+name: CI - EF Core Migrations
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - "README.md"
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - "README.md"
+  workflow_dispatch:
+
+jobs:
+  apply-migrations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install EF Core Tools
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Read Database Connection String
+        run: echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
+
+      - name: Extract DB Credentials
+        run: |
+          export DB_HOST=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Host=\([^;]*\).*/\1/p')
+          export DB_USER=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Username=\([^;]*\).*/\1/p')
+          export DB_PASS=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Password=\([^;]*\).*/\1/p')
+          echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
+          echo "::add-mask::$DB_PASS"  # Mask password in logs
+
+      - name: Confirm Database Connection
+        run: |
+          echo "Checking DB connection to $DB_HOST..."
+          sudo apt-get install -y postgresql-client
+          PGPASSWORD="$DB_PASS" pg_isready -h "$DB_HOST" -U "$DB_USER" || (echo "Database connection failed!" && exit 1)
+          echo "✅ Database connection successful!"
+
+      - name: Find All Migration Projects
+        id: find_migrations
+        run: |
+          echo "MIGRATION_PROJECTS=$(find . -type f -name '*.csproj' -path '*/migrationbundle/*' | xargs dirname | paste -sd ' ' -)" >> $GITHUB_ENV
+
+      - name: Generate Migration Bundles
+        run: |
+          for project in $MIGRATION_PROJECTS; do
+            echo "Generating migration bundle for $project"
+            dotnet ef migrations bundle -p "$project" --output "$project/efbundle.exe" --force
+          done
+
+      - name: Run EF Core Migrations
+        run: |
+          for project in $MIGRATION_PROJECTS; do
+            echo "Applying migrations for $project"
+            (cd "$project" && chmod +x efbundle.exe && ./efbundle.exe --connection "$DB_CONNECTION_STRING")
+          done
+
+      - name: Confirm Migration Execution
+        run: echo "All migrations applied successfully!"
