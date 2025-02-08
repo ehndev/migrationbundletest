@@ -1,0 +1,6 @@
+@migrationbundle_HostAddress = http://localhost:5073
+
+GET {{migrationbundle_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
