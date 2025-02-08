@@ -12,7 +12,7 @@ public static class PersistenceRegistration
        // var connectionString = configuration.GetConnectionString("DbConnection");
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
-        services.AddDbContext<Migrationdbcontext>(dbContextOptions =>
+        services.AddDbContext<migrationdbcontext>(dbContextOptions =>
         {
             dbContextOptions.UseNpgsql(connectionString);
             dbContextOptions.LogTo(Console.WriteLine, LogLevel.Information);
@@ -25,7 +25,7 @@ public static class PersistenceRegistration
 
         using (var scope = services.BuildServiceProvider().CreateScope())
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<Migrationdbcontext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<migrationdbcontext>();
             try
             {
                 if (dbContext.Database.CanConnect())

@@ -3,14 +3,14 @@ using migrationbundle.models;
 
 namespace migrationbundle;
 
-public class Migrationdbcontext: DbContext
+public class migrationdbcontext: DbContext
 {
     public DbSet<Todo> Todos { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Workflows> Workflows { get; set; }
     public DbSet<Users> Users { get; set; }
 
-    public Migrationdbcontext(DbContextOptions<Migrationdbcontext> options)
+    public migrationdbcontext(DbContextOptions<migrationdbcontext> options)
         : base(options)
     {
     }

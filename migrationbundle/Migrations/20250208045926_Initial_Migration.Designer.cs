@@ -11,7 +11,7 @@ using migrationbundle;
 
 namespace migrationbundle.Migrations
 {
-    [DbContext(typeof(Migrationdbcontext))]
+    [DbContext(typeof(migrationdbcontext))]
     [Migration("20250208045926_Initial_Migration")]
     partial class Initial_Migration
     {

@@ -11,7 +11,7 @@ using migrationbundle;
 
 namespace migrationbundle.Migrations
 {
-    [DbContext(typeof(Migrationdbcontext))]
+    [DbContext(typeof(migrationdbcontext))]
     [Migration("20250208051333_Category_CreationDate")]
     partial class Category_CreationDate
     {

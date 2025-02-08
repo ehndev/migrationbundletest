@@ -11,7 +11,7 @@ using migrationbundle;
 
 namespace migrationbundle.Migrations
 {
-    [DbContext(typeof(Migrationdbcontext))]
+    [DbContext(typeof(migrationdbcontext))]
     [Migration("20250208073215_Add_Users_Table")]
     partial class Add_Users_Table
     {

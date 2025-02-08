@@ -10,7 +10,7 @@ using migrationbundle;
 
 namespace migrationbundle.Migrations
 {
-    [DbContext(typeof(Migrationdbcontext))]
+    [DbContext(typeof(migrationdbcontext))]
     partial class MigrationdbcontextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

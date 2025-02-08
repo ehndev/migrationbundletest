@@ -11,7 +11,7 @@ using migrationbundle;
 
 namespace migrationbundle.Migrations
 {
-    [DbContext(typeof(Migrationdbcontext))]
+    [DbContext(typeof(migrationdbcontext))]
     [Migration("20250208070252_Workflows_Table")]
     partial class Workflows_Table
     {

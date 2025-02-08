@@ -57,7 +57,7 @@ jobs:
           echo "MIGRATION_PROJECTS=$(find . -type f -name '*.csproj' -path '*/migrationbundle/*' | xargs dirname | paste -sd ' ' -)" >> $GITHUB_ENV
 
       - name: Define Migration Contexts
-        run: echo "MIGRATION_CONTEXTS=(Migrationdbcontext orgdbcontext)" >> $GITHUB_ENV
+        run: echo "MIGRATION_CONTEXTS=(migrationdbcontext orgdbcontext)" >> $GITHUB_ENV
 
 
       - name: Generate Migrations if Pending
