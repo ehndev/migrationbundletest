@@ -32,32 +32,17 @@ jobs:
 
       - name: Extract DB Credentials
         run: |
-             # Debugging line to confirm the connection string is being passed correctly
-              echo "DB_CONNECTION_STRING=$DB_CONNECTION_STRING"
-        
-             # Extract host (database server)
-             export DB_HOST=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Host=\([^;]*\);.*/\1/p')
-        
-            # Extract user (username)
-            export DB_USER=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Username=\([^;]*\);.*/\1/p')
-        
-             # Extract password (user password)
-            export DB_PASS=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Password=\([^;]*\);.*/\1/p')
-        
-            # Debugging lines to check if the values are correct
-            echo "DB_HOST=$DB_HOST"
-            echo "DB_USER=$DB_USER"
-            echo "DB_PASS=$DB_PASS"
-        
-             # Add DB_HOST to GitHub environment
-            echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
-        
-        # Mask password in logs (only if password exists)
-            if [ -n "$DB_PASS" ]; then
-           echo "::add-mask::$DB_PASS"
-            fi
-        
-        
+           echo "DB_CONNECTION_STRING=$DB_CONNECTION_STRING"
+           export DB_HOST=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Host=\([^;]*\);.*/\1/p')
+           export DB_USER=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Username=\([^;]*\);.*/\1/p')
+           export DB_PASS=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*Password=\([^;]*\);.*/\1/p')
+           echo "DB_HOST=$DB_HOST"
+           echo "DB_USER=$DB_USER"
+           echo "DB_PASS=$DB_PASS"
+           echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
+           if [ -n "$DB_PASS" ]; then
+            echo "::add-mask::$DB_PASS"
+           fi
         
       - name: Confirm Database Connection
         run: |
