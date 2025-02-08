@@ -62,6 +62,8 @@ jobs:
         run: |
           for project in $MIGRATION_PROJECTS; do
             echo "Applying migrations for $project"
+            # Print the connection string being passed to ensure it's correct
+            echo "Using connection string: $DB_CONNECTION_STRING"
             (cd "$project" && chmod +x efbundle.exe && ./efbundle.exe --connection "$DB_CONNECTION_STRING")
           done
 
