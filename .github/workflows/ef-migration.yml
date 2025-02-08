@@ -32,11 +32,15 @@ jobs:
 
       - name: Extract DB Credentials
         run: |
-         export DB_HOST=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*@\(.*\)\/.*/\1/p')
-         export DB_USER=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*\/\/\(.*\):.*/\1/p')
-         export DB_PASS=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*:\/\/.*:\([^@]*\)@.*/\1/p')
-         echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
-         echo "::add-mask::$DB_PASS"  # Mask password in logs
+          # Extract host (database server)
+          export DB_HOST=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*@\(.*\)-.*$/\1/p')
+          # Extract user (username)
+          export DB_USER=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*\/\/\(.*\):.*/\1/p')
+          # Extract password (user password)
+          export DB_PASS=$(echo "$DB_CONNECTION_STRING" | sed -n 's/.*:\/\/.*:\([^@]*\)@.*/\1/p')
+          
+          echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
+          echo "::add-mask::$DB_PASS" 
 
 
       - name: Confirm Database Connection
