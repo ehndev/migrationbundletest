@@ -9,7 +9,8 @@ public static class PersistenceRegistration
         IConfiguration configuration,
         ILogger logger)
     {
-        var connectionString = configuration.GetConnectionString("DbConnection");
+       // var connectionString = configuration.GetConnectionString("DbConnection");
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
         services.AddDbContext<Migrationdbcontext>(dbContextOptions =>
         {
