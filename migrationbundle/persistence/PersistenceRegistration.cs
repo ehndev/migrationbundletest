@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using migrationbundle.Orgs;
 
 namespace migrationbundle.persistence;
 
@@ -6,13 +7,17 @@ public static class PersistenceRegistration
 {
     public static IServiceCollection RegisterDatabase(
         this IServiceCollection services,
-        IConfiguration configuration,
         ILogger logger)
     {
        // var connectionString = configuration.GetConnectionString("DbConnection");
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
         services.AddDbContext<Migrationdbcontext>(dbContextOptions =>
+        {
+            dbContextOptions.UseNpgsql(connectionString);
+            dbContextOptions.LogTo(Console.WriteLine, LogLevel.Information);
+        });
+        services.AddDbContext<orgdbcontext>(dbContextOptions =>
         {
             dbContextOptions.UseNpgsql(connectionString);
             dbContextOptions.LogTo(Console.WriteLine, LogLevel.Information);

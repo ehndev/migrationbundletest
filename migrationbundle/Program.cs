@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-builder.Services.RegisterDatabase(builder.Configuration, logger);
+builder.Services.RegisterDatabase(logger);
 
 var app = builder.Build();
 
